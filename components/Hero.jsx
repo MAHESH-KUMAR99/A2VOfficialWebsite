@@ -15,6 +15,7 @@ export default function ITSolutionPage() {
   const statCardsRef = useRef(null);
   const solutionTextRef = useRef(null);
   const servicesRef = useRef(null);
+  const servicesCarouselRef = useRef(null);
 
   useEffect(() => {
     // Three.js Scene Setup
@@ -207,6 +208,29 @@ export default function ITSolutionPage() {
           toggleActions: 'play none none reverse',
         },
       });
+
+      // Infinite carousel animation for services
+      if (servicesCarouselRef.current) {
+        const carousel = servicesCarouselRef.current;
+        const firstSet = carousel.children[0];
+        const carouselWidth = firstSet.scrollWidth;
+
+        const carouselAnimation = gsap.to(carousel, {
+          x: -carouselWidth,
+          duration: 30,
+          ease: 'none',
+          repeat: -1,
+        });
+
+        // Pause on hover
+        carousel.addEventListener('mouseenter', () => {
+          carouselAnimation.pause();
+        });
+
+        carousel.addEventListener('mouseleave', () => {
+          carouselAnimation.resume();
+        });
+      }
     });
 
     return () => {
@@ -218,17 +242,16 @@ export default function ITSolutionPage() {
   }, []);
 
   const services = [
-    'Infrastructure',
-    'Software Development',
     'Consulting',
     'Network Design',
     'Database Design',
     'IT Support',
     'IT Audit',
-    'Development',
-    'Consulting',
-    'Network Design',
-    'Database Design',
+    'Data Solutions',
+    'IT Roadmaps',
+    'App Solutions',
+    'IT Infrastructure',
+    'Software Development',
   ];
 
   return (
@@ -345,20 +368,6 @@ export default function ITSolutionPage() {
             IT SOLUTION.
           </h2>
         </div>
-
-        {/* Services Ticker */}
-        <div ref={servicesRef} className="pb-16 overflow-hidden">
-          <div className="flex items-center gap-8 text-gray-800 font-medium text-base border-t border-gray-300 pt-4">
-            {services.map((service, index) => (
-              <span
-                key={index}
-                className="whitespace-nowrap hover:text-gray-600 transition-colors cursor-pointer"
-              >
-                {service}
-              </span>
-            ))}
-          </div>
-        </div>
       </main>
 
       {/* Social Links - Left Side */}
@@ -407,6 +416,52 @@ export default function ITSolutionPage() {
             <path d="M22.46 6c-.85.38-1.78.64-2.75.76a4.83 4.83 0 002.11-2.65c-.93.55-1.95.95-3.05 1.17a4.8 4.8 0 00-8.18 4.37A13.65 13.65 0 013.39 4.62a4.82 4.82 0 001.49 6.41 4.77 4.77 0 01-2.18-.6v.06a4.8 4.8 0 003.85 4.7 4.8 4.8 0 01-2.16.08 4.81 4.81 0 004.48 3.33A9.63 9.63 0 012 19.54a13.57 13.57 0 007.36 2.15c8.83 0 13.65-7.31 13.65-13.65 0-.21 0-.41-.02-.62A9.75 9.75 0 0024 4.59a9.57 9.57 0 01-2.54.7z" />
           </svg>
         </a>
+      </div>
+
+      {/* Services Carousel */}
+      <div
+        ref={servicesRef}
+        className="pb-16 overflow-hidden "
+      >
+        <div className="py-8">
+          <div ref={servicesCarouselRef} className="flex items-center gap-4">
+            {/* First set of services */}
+            <div className="flex items-center gap-4 flex-shrink-0">
+              {services.map((service, index) => (
+                <button
+                  key={`service-1-${index}`}
+                  className="px-8 py-3 bg-transparent backdrop-blur-sm border border-gray-300 rounded-full text-gray-800 font-medium text-sm hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 whitespace-nowrap shadow-sm hover:shadow-lg transform hover:scale-105"
+                >
+                  {service}
+                </button>
+              ))}
+            </div>
+
+            {/* Duplicate set for seamless loop */}
+            <div className="flex items-center gap-4 flex-shrink-0">
+              {services.map((service, index) => (
+                <button
+                  key={`service-2-${index}`}
+                  className="px-8 py-3 bg-transparent backdrop-blur-sm border border-gray-300 rounded-full text-gray-800 font-medium text-sm hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 whitespace-nowrap shadow-sm hover:shadow-lg transform hover:scale-105"
+                >
+                  {service}
+                </button>
+              ))}
+            </div>
+
+            {/* Third set for extra smooth looping */}
+            <div className="flex items-center gap-4 flex-shrink-0">
+              {services.map((service, index) => (
+                <button
+                  key={`service-3-${index}`}
+                  className="px-8 py-3 bg-white/60 backdrop-blur-sm border border-gray-300 rounded-full text-gray-800 font-medium text-sm hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 whitespace-nowrap shadow-sm hover:shadow-lg transform hover:scale-105"
+                >
+                  {service}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
