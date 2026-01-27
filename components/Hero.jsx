@@ -241,7 +241,7 @@ export default function ITSolutionPage() {
       />
 
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between px-8 lg:px-16 py-6">
+      <header className="max-w-[1600px] mx-auto relative z-10 flex items-center justify-between px-8 lg:px-16 py-6">
         <div className="flex items-center gap-2">
           <div className="text-2xl font-bold text-gray-900">λ → LERIC</div>
           <div className="text-xs text-gray-600 mt-2">Since . 2018</div>
@@ -285,12 +285,12 @@ export default function ITSolutionPage() {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 px-8 lg:px-16 pt-16 lg:pt-24">
+      <main className="max-w-[1650px] mx-auto relative z-10 px-8 lg:px-16 pt-16 lg:pt-30">
         {/* Hero Section */}
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-32">
           {/* Left - Hero Text */}
           <div ref={heroTextRef} className="space-y-6">
-            <h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 leading-[0.95] tracking-tight">
+            <h1 className="text-6xl lg:text-7xl xl:text-7xl font-bold text-gray-900 leading-[0.95] tracking-tight">
               Complete IT,
               <br />
               Digital & Branding
@@ -302,17 +302,16 @@ export default function ITSolutionPage() {
           </div>
 
           {/* Right - Stats */}
-          <div ref={statCardsRef} className="space-y-4 pt-8">
-
+          <div ref={statCardsRef} className="space-y-2 pt-8">
             {/* Right - Stats - Single Row Flex Layout */}
             <div ref={statCardsRef} className="pt-8">
-              <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start lg:items-center">
+              <div className="flex flex-col lg:flex-row ">
                 {/* First Stat */}
-                <div className="flex-1 group">
-                  <div className="text-[4.5rem] lg:text-7xl xl:text-[8rem] font-black text-gray-900 mb-3 leading-none tracking-tighter group-hover:text-orange-500 transition-all duration-500">
-                    99<span className="text-orange-500 font-normal">+</span>
+                <div className="flex-1 group  pl-80">
+                  <div className="text-[4.5rem] lg:text-7xl xl:text-[4rem] font-black text-gray-900 mb-3 leading-none tracking-tighter group-hover:text-orange-500 transition-all duration-500">
+                    99<span className=" font-normal">+</span>
                   </div>
-                  <p className="text-gray-700 font-medium text-lg lg:text-xl leading-snug tracking-wide max-w-[220px]">
+                  <p className="text-gray-700 font-medium text-lg lg:text-lg leading-snug tracking-wide max-w-[220px]">
                     Clients Satisfied <br className="hidden lg:block" />
                     <span className="block lg:inline font-semibold">
                       And Returning.
@@ -325,10 +324,10 @@ export default function ITSolutionPage() {
 
                 {/* Second Stat */}
                 <div className="flex-1 group">
-                  <div className="text-[4.5rem] lg:text-7xl xl:text-[8rem] font-black text-gray-900 mb-3 leading-none tracking-tighter group-hover:text-orange-500 transition-all duration-500">
-                    152<span className="text-orange-500 font-normal">+</span>
+                  <div className="text-[4.5rem] lg:text-7xl xl:text-[4rem] font-black text-gray-900 mb-3 leading-none tracking-tighter group-hover:text-orange-500 transition-all duration-500">
+                    152<span className=" font-normal">+</span>
                   </div>
-                  <p className="text-gray-700 font-medium text-lg lg:text-xl leading-snug tracking-wide max-w-[240px]">
+                  <p className="text-gray-700 font-medium text-lg lg:text-lg leading-snug tracking-wide max-w-[240px]">
                     Projects Delivered <br className="hidden lg:block" />
                     <span className="block lg:inline font-semibold">
                       In 25+ Countries.
