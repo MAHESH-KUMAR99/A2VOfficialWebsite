@@ -72,7 +72,7 @@ export default function AlericITPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#f8fffb] text-[#0a251c] font-sans overflow-hidden">
+    <div className="relative min-h-screen max-w-[] bg-[#f8fffb] text-[#0a251c] font-sans overflow-hidden">
       <canvas
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none z-0"
@@ -99,7 +99,7 @@ export default function AlericITPage() {
               {/* Floating Tags (Fixed with your original colors & smooth floating) */}
               <FloatingTag
                 text="Optimization"
-                className="top-1/2 -left-8 bg-orange-500 text-white"
+                className="top-1/2 -left-8 bg-[#dcfce7] text-[#166534]"
                 yDelta={-15}
                 delay={0}
               />
