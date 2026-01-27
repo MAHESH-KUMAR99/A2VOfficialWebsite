@@ -1,190 +1,175 @@
-"use client";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
+'use client';
+import React, { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
 
-const serviceList = [
-  { title: "Web Architecture", icon: "🌐", slug: "web-dev" },
-  { title: "Bespoke E-commerce", icon: "💎", slug: "ecommerce" },
-  { title: "Mobile Ecosystems", icon: "📱", slug: "apps" },
-  { title: "Digital Strategy", icon: "📈", slug: "strategy" },
-  { title: "SaaS Innovation", icon: "☁️", slug: "saas", highlight: true },
-  { title: "Performance Ads", icon: "🎯", slug: "ads" },
-];
+// --- Animated Background Mesh (Three.js) ---
+const AbstractBackground = () => {
+  return (
+    <div className="absolute inset-0 -z-10 bg-[#fffcf8]">
+      <Canvas camera={{ position: [0, 0, 5] }}>
+        <ambientLight intensity={1.5} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <Sphere args={[1, 100, 200]} scale={2.5}>
+          <MeshDistortMaterial
+            color="#ffa10a"
+            attach="material"
+            distort={0.4}
+            speed={1.5}
+            roughness={0}
+            opacity={0.15}
+            transparent
+          />
+        </Sphere>
+      </Canvas>
+    </div>
+  );
+};
 
-export default function UltimateAgencyHero() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const router = useRouter();
+const HeroPage = () => {
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    setIsLoaded(true);
+    const ctx = gsap.context(() => {
+      // Headline Animation
+      gsap.from('.headline span', {
+        y: 120,
+        skewY: 7,
+        stagger: 0.1,
+        duration: 1.5,
+        ease: 'power4.out',
+      });
+
+      // IT SOLUTION Background Text Animation
+      gsap.to('.bg-text', {
+        xPercent: -20,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          scrub: 1,
+        },
+      });
+    }, containerRef);
+    return () => ctx.revert();
   }, []);
 
+  const services = [
+    'IT Audit',
+    'Data Solutions',
+    'IT Roadmaps',
+    'App Solutions',
+    'IT Infrastructure',
+    'Software Development',
+    'Consulting',
+    'Network Design',
+  ];
+
   return (
-    <section className="relative min-h-screen w-full bg-[#f8f8f8] flex items-center justify-center overflow-hidden py-24 selection:bg-[#FF8A00] selection:text-white font-sans">
-      {/* --- AMBIENT LUXURY BACKGROUND --- */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-gradient-to-br from-[#FF8A00]/10 to-transparent blur-[160px] rounded-full" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-orange-50/40 blur-[140px] rounded-full" />
-      </div>
+    <div
+      ref={containerRef}
+      className="relative min-h-screen overflow-hidden selection:bg-[#ff6600] selection:text-white"
+    >
+      <AbstractBackground />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-12 gap-12 items-center">
-        {/* --- LEFT: LUXURY TYPOGRAPHY --- */}
-        <div className="lg:col-span-7">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="flex items-center gap-4 mb-10">
-              <span className="h-[1px] w-16 bg-[#FF8A00]"></span>
-              <p className="text-[#FF8A00] font-black tracking-[0.5em] uppercase text-[9px]">
-                A2V Groups • India's #1 Since 2009
-              </p>
-            </div>
-
-            <h1 className="text-7xl md:text-[95px] font-black text-[#111] leading-[0.85] tracking-tighter mb-12">
-              CREATING <br />
-              <span className="italic font-light text-gray-400">New</span>{" "}
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF8A00] to-[#FFB800]">
-                STANDARDS.
-              </span>
-            </h1>
-
-            <div className="max-w-md space-y-8">
-              <p className="text-gray-400 text-lg leading-relaxed font-light">
-                We bridge the gap between{" "}
-                <span className="text-gray-900 font-medium italic">
-                  Pure Art
-                </span>{" "}
-                and{" "}
-                <span className="text-gray-900 font-medium italic">
-                  High Technology
-                </span>
-                . 15 years of surgical precision in digital craft.
-              </p>
-
-              <div className="flex items-center gap-6">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  onClick={() => router.push("/contact")}
-                  className="bg-[#111] text-white px-12 py-6 rounded-full font-black text-[10px] uppercase tracking-[0.3em] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] transition-all"
-                >
-                  Start Consultation
-                </motion.button>
-                <div className="h-12 w-[1px] bg-gray-200"></div>
-                <div className="flex flex-col">
-                  <span className="text-2xl font-black text-gray-900">7k+</span>
-                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
-                    Global Assets
-                  </span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+      {/* --- Navbar --- */}
+      <nav className="flex justify-between items-center px-12 py-8 z-50 relative">
+        <div className="flex items-center gap-2 font-black text-2xl tracking-tighter">
+          <span className="bg-[#ff6600] text-white w-8 h-8 flex items-center justify-center rounded-sm">
+            A
+          </span>
+          ALERIC
         </div>
-
-        {/* --- RIGHT: INTERACTIVE GLASS HUB --- */}
-        <div className="lg:col-span-5 relative">
-          <div className="grid grid-cols-2 gap-5">
-            {/* Main Premium Metric */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
-              className="col-span-2 bg-white p-10 rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.06)] border border-gray-50 flex flex-col justify-between h-64 relative overflow-hidden group"
+        <div className="hidden md:flex gap-12 font-bold text-[13px] tracking-widest text-gray-500">
+          {['HOME', 'PAGES', 'BLOG', 'CONTACT'].map((m) => (
+            <a
+              key={m}
+              className="hover:text-[#ff6600] transition-colors"
+              href="#"
             >
-              <div className="flex justify-between items-start">
-                <div className="bg-orange-50 text-[#FF8A00] w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-transform group-hover:rotate-12">
-                  🏆
-                </div>
-                <div className="bg-green-50 text-green-600 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping" />{" "}
-                  Active Studio
-                </div>
-              </div>
-              <div>
-                <h3 className="text-6xl font-black text-gray-900 tracking-tighter">
-                  4.9<span className="text-orange-200">/5</span>
-                </h3>
-                <p className="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mt-2">
-                  Client Trust Benchmark
-                </p>
-              </div>
-            </motion.div>
+              {m}
+            </a>
+          ))}
+        </div>
+        <div className="flex items-center gap-6">
+          <button className="bg-[#1a2e2a] text-white px-8 py-3 rounded-full font-bold text-sm hover:bg-[#ff6600] transition-all duration-500">
+            Sign Up
+          </button>
+          <div className="space-y-1.5 cursor-pointer">
+            <div className="w-8 h-[2px] bg-black"></div>
+            <div className="w-8 h-[2px] bg-black"></div>
+          </div>
+        </div>
+      </nav>
 
-            {/* Performance Tiles */}
-            <motion.div
-              whileHover={{ y: -5 }}
-              className="bg-gradient-to-br from-[#FF8A00] to-[#FFB800] p-8 rounded-[2.5rem] text-white shadow-2xl flex flex-col justify-center items-center overflow-hidden relative"
-            >
-              <p className="text-4xl font-black relative z-10">1.2s</p>
-              <p className="text-white/70 text-[9px] font-black uppercase tracking-widest mt-1 relative z-10">
-                Peak Speed
-              </p>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ y: -5 }}
-              className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-50 flex flex-col justify-center items-center"
-            >
-              <p className="text-4xl font-black text-gray-900">15+</p>
-              <p className="text-gray-400 text-[9px] font-black uppercase tracking-widest mt-1">
-                Years XP
-              </p>
-            </motion.div>
-
-            {/* SERVICE HUB */}
-            <div className="col-span-2 mt-4 space-y-4">
-              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em] text-center">
-                Our Expertise
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {serviceList.map((service, idx) => (
-                  <motion.button
-                    key={idx}
-                    whileHover={{
-                      scale: 1.05,
-                      borderColor: "#FF8A00",
-                      color: "#FF8A00",
-                    }}
-                    onClick={() => router.push(`/services/${service.slug}`)}
-                    className={`px-5 py-3 rounded-2xl text-[9px] font-black uppercase tracking-[0.15em] border transition-all 
-                    ${
-                      service.highlight
-                        ? "bg-[#FF8A00] border-[#FF8A00] text-white shadow-lg shadow-orange-100"
-                        : "bg-white border-gray-100 text-gray-400 shadow-sm"
-                    }`}
-                  >
-                    {service.title}
-                  </motion.button>
-                ))}
+      {/* --- Main Content --- */}
+      <main className="px-12 pt-16 relative z-10">
+        <div className="grid grid-cols-12">
+          <div className="col-span-8">
+            <h1 className="headline text-[120px] leading-[0.85] font-bold text-[#1a2e2a] tracking-tight">
+              <div className="overflow-hidden h-[120px]">
+                <span>Developing</span>
               </div>
-            </div>
+              <div className="overflow-hidden h-[120px]">
+                <span>Future-Ready</span>
+              </div>
+              <div className="overflow-hidden h-[120px] italic font-serif font-light text-[#ff6600]">
+                <span>It Solutions</span>
+              </div>
+            </h1>
           </div>
 
-          {/* Floating Detail */}
+          <div className="col-span-4 flex flex-col justify-start pt-10">
+            <div className="border-l-2 border-gray-100 pl-8">
+              <h2 className="text-7xl font-bold text-[#1a2e2a]">99%</h2>
+              <p className="text-gray-400 font-medium mt-2 leading-relaxed tracking-wider text-sm uppercase">
+                Clients Satisfied And <br /> Repeating.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end mt-[-50px]">
+          <div className="text-right">
+            <h2 className="text-[150px] font-bold text-[#1a2e2a] leading-none">
+              152+
+            </h2>
+            <p className="text-gray-400 font-medium tracking-widest text-sm uppercase mr-4">
+              Project Completed In <br /> 25 Countries.
+            </p>
+          </div>
+        </div>
+      </main>
+
+      {/* --- Animated Giant Text (IT SOLUTION Effect) --- */}
+      <div className="absolute bottom-16 left-0 w-full whitespace-nowrap z-0 pointer-events-none">
+        <h2 className="bg-text text-[25vw] font-black leading-none opacity-[0.04] text-black">
+          IT SOLUTION.
+        </h2>
+      </div>
+
+      {/* --- Infinite Scrolling Services Bar --- */}
+      <div className="absolute bottom-0 w-full bg-white/30 backdrop-blur-md border-t border-gray-100 py-6">
+        <div className="flex overflow-hidden group">
           <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 4, repeat: Infinity }}
-            className="absolute -bottom-10 -right-10 bg-white p-5 rounded-3xl shadow-2xl border border-orange-50 hidden xl:flex items-center gap-4 z-50"
+            animate={{ x: [0, -1000] }}
+            transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
+            className="flex gap-12 whitespace-nowrap px-6"
           >
-            <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500">
-              ⚡
-            </div>
-            <div>
-              <p className="text-lg font-black text-gray-900 leading-none">
-                Global
-              </p>
-              <p className="text-[9px] font-bold text-gray-400 uppercase mt-1">
-                Presence
-              </p>
-            </div>
+            {[...services, ...services].map((s, i) => (
+              <span
+                key={i}
+                className="flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-[#1a2e2a]"
+              >
+                <div className="w-2 h-2 bg-[#ff6600] rounded-full" />
+                {s}
+              </span>
+            ))}
           </motion.div>
         </div>
       </div>
-
-      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-    </section>
+    </div>
   );
-}
+};
+
+export default HeroPage;
