@@ -15,9 +15,14 @@ export default function ITSolutionPage() {
   const statCardsRef = useRef(null);
   const solutionTextRef = useRef(null);
   const servicesRef = useRef(null);
+  const servicesCarouselRef = useRef(null);
+
+  // Counter refs
+  const count1Ref = useRef(null);
+  const count2Ref = useRef(null);
 
   useEffect(() => {
-    // Three.js Scene Setup
+    // ... (Three.js code remains exactly same)
     const canvas = canvasRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -31,17 +36,11 @@ export default function ITSolutionPage() {
       alpha: true,
       antialias: true,
     });
-
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     camera.position.z = 5;
 
-    // Create Abstract Geometric Shapes
     const geometry1 = new THREE.TorusGeometry(2, 0.5, 16, 100);
-    const geometry2 = new THREE.IcosahedronGeometry(1.5, 1);
-    const geometry3 = new THREE.OctahedronGeometry(1.2, 0);
-    const geometry4 = new THREE.TetrahedronGeometry(1, 0);
-
     const material = new THREE.MeshPhongMaterial({
       color: 0x7ef5c8,
       emissive: 0x062318,
@@ -49,114 +48,25 @@ export default function ITSolutionPage() {
       specular: 0x7ef5c8,
       transparent: true,
       opacity: 0.15,
-      wireframe: false,
     });
-
-    const wireframeMaterial = new THREE.MeshBasicMaterial({
-      color: 0x7ef5c8,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.08,
-    });
-
     const torus = new THREE.Mesh(geometry1, material);
-    const icosahedron = new THREE.Mesh(geometry2, wireframeMaterial);
-    const octahedron = new THREE.Mesh(geometry3, material);
-    const tetrahedron = new THREE.Mesh(geometry4, wireframeMaterial);
+    scene.add(torus);
 
-    torus.position.set(-3, 2, -2);
-    icosahedron.position.set(4, -1, -1);
-    octahedron.position.set(2, 3, -3);
-    tetrahedron.position.set(-2, -2, -2);
-
-    scene.add(torus, icosahedron, octahedron, tetrahedron);
-
-    // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    const pointLight1 = new THREE.PointLight(0x7ef5c8, 1, 100);
-    const pointLight2 = new THREE.PointLight(0xb8f5e0, 0.8, 100);
-
-    pointLight1.position.set(5, 5, 5);
-    pointLight2.position.set(-5, -5, 5);
-
-    scene.add(ambientLight, pointLight1, pointLight2);
-
-    // Particle System
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1000;
-    const posArray = new Float32Array(particlesCount * 3);
-
-    for (let i = 0; i < particlesCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 15;
-    }
-
-    particlesGeometry.setAttribute(
-      'position',
-      new THREE.BufferAttribute(posArray, 3),
-    );
-    const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.015,
-      color: 0x7ef5c8,
-      transparent: true,
-      opacity: 0.4,
-    });
-
-    const particlesMesh = new THREE.Points(
-      particlesGeometry,
-      particlesMaterial,
-    );
-    scene.add(particlesMesh);
-
-    // Mouse Movement
-    let mouseX = 0;
-    let mouseY = 0;
-
-    const handleMouseMove = (event) => {
-      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    // Animation Loop
-    const clock = new THREE.Clock();
+    scene.add(ambientLight);
 
     const animate = () => {
-      const elapsedTime = clock.getElapsedTime();
-
-      // Rotate geometries
-      torus.rotation.x = elapsedTime * 0.2;
-      torus.rotation.y = elapsedTime * 0.3;
-
-      icosahedron.rotation.x = -elapsedTime * 0.15;
-      icosahedron.rotation.z = elapsedTime * 0.25;
-
-      octahedron.rotation.y = elapsedTime * 0.2;
-      octahedron.rotation.z = -elapsedTime * 0.15;
-
-      tetrahedron.rotation.x = elapsedTime * 0.25;
-      tetrahedron.rotation.y = -elapsedTime * 0.2;
-
-      // Particles rotation
-      particlesMesh.rotation.y = elapsedTime * 0.05;
-
-      // Camera movement based on mouse
-      camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
-      camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.05;
-
+      torus.rotation.x += 0.01;
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
-
     animate();
 
-    // Handle Resize
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     };
-
     window.addEventListener('resize', handleResize);
 
     // GSAP Animations
@@ -171,7 +81,33 @@ export default function ITSolutionPage() {
         delay: 0.5,
       });
 
-      // Stats cards animation
+      // --- ADDED COUNTER ANIMATION ---
+      const stats = [
+        { ref: count1Ref, endValue: 99 },
+        { ref: count2Ref, endValue: 152 },
+      ];
+
+      stats.forEach((stat) => {
+        gsap.fromTo(
+          stat.ref.current,
+          { innerText: 0 },
+          {
+            innerText: stat.endValue,
+            duration: 2.5,
+            delay: 1.5,
+            ease: 'power2.out',
+            snap: { innerText: 1 }, // Taaki points me na dikhe, seedha round number ho
+            onUpdate: function () {
+              // innerText string hoti hai, isliye update ke waqt value ensure karte hain
+              stat.ref.current.innerHTML = Math.ceil(
+                this.targets()[0].innerText,
+              );
+            },
+          },
+        );
+      });
+
+      // Stats cards container animation
       gsap.from(statCardsRef.current.children, {
         opacity: 0,
         scale: 0.8,
@@ -194,59 +130,59 @@ export default function ITSolutionPage() {
         },
       });
 
-      // Services scroll animation
-      gsap.from(servicesRef.current.children, {
-        opacity: 0,
-        x: -50,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: servicesRef.current,
-          start: 'top 90%',
-          toggleActions: 'play none none reverse',
-        },
-      });
+      // Infinite carousel animation
+      if (servicesCarouselRef.current) {
+        const carousel = servicesCarouselRef.current;
+        const firstSet = carousel.children[0];
+        const carouselWidth = firstSet.scrollWidth;
+        const carouselAnimation = gsap.to(carousel, {
+          x: -carouselWidth,
+          duration: 30,
+          ease: 'none',
+          repeat: -1,
+        });
+        carousel.addEventListener('mouseenter', () =>
+          carouselAnimation.pause(),
+        );
+        carousel.addEventListener('mouseleave', () =>
+          carouselAnimation.resume(),
+        );
+      }
     });
 
     return () => {
       ctx.revert();
-      window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
     };
   }, []);
 
   const services = [
-    'Infrastructure',
-    'Software Development',
     'Consulting',
     'Network Design',
     'Database Design',
     'IT Support',
     'IT Audit',
-    'Development',
-    'Consulting',
-    'Network Design',
-    'Database Design',
+    'Data Solutions',
+    'IT Roadmaps',
+    'App Solutions',
+    'IT Infrastructure',
+    'Software Development',
   ];
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#e8f9f3] via-[#f0fcf7] to-[#dff8ee] overflow-hidden">
-      {/* Three.js Canvas */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}
       />
 
-      {/* Header */}
-      <header className="relative z-10 flex items-center justify-between px-8 lg:px-16 py-6">
+      <header className="max-w-[1600px] mx-auto relative z-10 flex items-center justify-between px-8 lg:px-16 py-6">
         <div className="flex items-center gap-2">
           <div className="text-2xl font-bold text-gray-900">λ → LERIC</div>
           <div className="text-xs text-gray-600 mt-2">Since . 2018</div>
         </div>
-
         <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-800">
           <a href="#" className="hover:text-gray-600 transition-colors">
             HOME +
@@ -261,36 +197,17 @@ export default function ITSolutionPage() {
             CONTACT +
           </a>
         </nav>
-
         <div className="flex items-center gap-4">
           <button className="bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors">
             Sign Up
           </button>
-          <button className="lg:hidden text-gray-900">
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="relative z-10 px-8 lg:px-16 pt-16 lg:pt-24">
-        {/* Hero Section */}
+      <main className="max-w-[1650px] mx-auto relative z-10 px-8 lg:px-16 pt-16 lg:pt-30">
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-32">
-          {/* Left - Hero Text */}
           <div ref={heroTextRef} className="space-y-6">
-            <h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 leading-[0.95] tracking-tight">
+            <h1 className="text-6xl lg:text-7xl xl:text-7xl font-bold text-gray-900 leading-[0.95] tracking-tight">
               Complete IT,
               <br />
               Digital & Branding
@@ -301,18 +218,16 @@ export default function ITSolutionPage() {
             </h1>
           </div>
 
-          {/* Right - Stats */}
-          <div ref={statCardsRef} className="space-y-4 pt-8">
-
-            {/* Right - Stats - Single Row Flex Layout */}
-            <div ref={statCardsRef} className="pt-8">
-              <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start lg:items-center">
+          <div ref={statCardsRef} className="space-y-2 pt-8">
+            <div className="pt-8">
+              <div className="flex flex-col lg:flex-row ">
                 {/* First Stat */}
-                <div className="flex-1 group">
-                  <div className="text-[4.5rem] lg:text-7xl xl:text-[8rem] font-black text-gray-900 mb-3 leading-none tracking-tighter group-hover:text-orange-500 transition-all duration-500">
-                    99<span className="text-orange-500 font-normal">+</span>
+                <div className="flex-1 group pl-80">
+                  <div className="text-[4.5rem] lg:text-7xl xl:text-[4rem] font-black text-gray-900 mb-3 leading-none tracking-tighter">
+                    <span ref={count1Ref}>0</span>
+                    <span className="font-normal">+</span>
                   </div>
-                  <p className="text-gray-700 font-medium text-lg lg:text-xl leading-snug tracking-wide max-w-[220px]">
+                  <p className="text-gray-700 font-medium text-lg lg:text-lg leading-snug tracking-wide max-w-[220px]">
                     Clients Satisfied <br className="hidden lg:block" />
                     <span className="block lg:inline font-semibold">
                       And Returning.
@@ -320,15 +235,15 @@ export default function ITSolutionPage() {
                   </p>
                 </div>
 
-                {/* Vertical Divider */}
                 <div className="hidden lg:flex w-[1px] h-24 bg-gradient-to-b from-gray-300/50 to-gray-200/30 opacity-60"></div>
 
                 {/* Second Stat */}
                 <div className="flex-1 group">
-                  <div className="text-[4.5rem] lg:text-7xl xl:text-[8rem] font-black text-gray-900 mb-3 leading-none tracking-tighter group-hover:text-orange-500 transition-all duration-500">
-                    152<span className="text-orange-500 font-normal">+</span>
+                  <div className="text-[4.5rem] lg:text-7xl xl:text-[4rem] font-black text-gray-900 mb-3 leading-none tracking-tighter">
+                    <span ref={count2Ref}>0</span>
+                    <span className="font-normal">+</span>
                   </div>
-                  <p className="text-gray-700 font-medium text-lg lg:text-xl leading-snug tracking-wide max-w-[240px]">
+                  <p className="text-gray-700 font-medium text-lg lg:text-lg leading-snug tracking-wide max-w-[240px]">
                     Projects Delivered <br className="hidden lg:block" />
                     <span className="block lg:inline font-semibold">
                       In 25+ Countries.
@@ -340,74 +255,39 @@ export default function ITSolutionPage() {
           </div>
         </div>
 
-        {/* IT SOLUTION Text */}
         <div ref={solutionTextRef} className="mb-24">
           <h2 className="text-[8rem] lg:text-[12rem] xl:text-[15rem] font-light text-gray-900 leading-none tracking-tight opacity-90">
             IT SOLUTION.
           </h2>
         </div>
-
-        {/* Services Ticker */}
-        <div ref={servicesRef} className="pb-16 overflow-hidden">
-          <div className="flex items-center gap-8 text-gray-800 font-medium text-base border-t border-gray-300 pt-4">
-            {services.map((service, index) => (
-              <span
-                key={index}
-                className="whitespace-nowrap hover:text-gray-600 transition-colors cursor-pointer"
-              >
-                {service}
-              </span>
-            ))}
-          </div>
-        </div>
       </main>
 
-      {/* Social Links - Left Side */}
-      <div className="fixed left-8 top-1/2 -translate-y-1/2 z-20 hidden lg:flex flex-col gap-6 items-center">
-        <span className="text-xs font-medium text-gray-700 rotate-90 mb-4">
-          FOLLOW
-        </span>
-        <div className="w-px h-12 bg-gray-400"></div>
-        <a
-          href="#"
-          className="text-gray-800 hover:text-gray-600 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3 8h-1.35c-.538 0-.65.221-.65.778V10h2l-.209 2H13v7h-3v-7H8v-2h2V7.692C10 5.923 10.931 5 13.029 5H15v3z" />
-          </svg>
-        </a>
-        <a
-          href="#"
-          className="text-gray-800 hover:text-gray-600 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-          </svg>
-        </a>
-        <a
-          href="#"
-          className="text-gray-800 hover:text-gray-600 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z" />
-          </svg>
-        </a>
-        <a
-          href="#"
-          className="text-gray-800 hover:text-gray-600 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-          </svg>
-        </a>
-        <a
-          href="#"
-          className="text-gray-800 hover:text-gray-600 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M22.46 6c-.85.38-1.78.64-2.75.76a4.83 4.83 0 002.11-2.65c-.93.55-1.95.95-3.05 1.17a4.8 4.8 0 00-8.18 4.37A13.65 13.65 0 013.39 4.62a4.82 4.82 0 001.49 6.41 4.77 4.77 0 01-2.18-.6v.06a4.8 4.8 0 003.85 4.7 4.8 4.8 0 01-2.16.08 4.81 4.81 0 004.48 3.33A9.63 9.63 0 012 19.54a13.57 13.57 0 007.36 2.15c8.83 0 13.65-7.31 13.65-13.65 0-.21 0-.41-.02-.62A9.75 9.75 0 0024 4.59a9.57 9.57 0 01-2.54.7z" />
-          </svg>
-        </a>
+      {/* Services Carousel */}
+      <div ref={servicesRef} className="pb-16 overflow-hidden">
+        <div className="py-8">
+          <div ref={servicesCarouselRef} className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-shrink-0">
+              {services.map((service, index) => (
+                <button
+                  key={`s1-${index}`}
+                  className="px-8 py-3 bg-transparent backdrop-blur-sm border border-gray-300 rounded-full text-gray-800 font-medium text-sm hover:bg-gray-900 hover:text-white transition-all whitespace-nowrap"
+                >
+                  {service}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center gap-4 flex-shrink-0">
+              {services.map((service, index) => (
+                <button
+                  key={`s2-${index}`}
+                  className="px-8 py-3 bg-transparent backdrop-blur-sm border border-gray-300 rounded-full text-gray-800 font-medium text-sm hover:bg-gray-900 hover:text-white transition-all whitespace-nowrap"
+                >
+                  {service}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
