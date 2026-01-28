@@ -44,17 +44,17 @@ export default function ITSolutionPage() {
 
     const geometry1 = new THREE.TorusGeometry(2, 0.5, 16, 100);
     const material = new THREE.MeshPhongMaterial({
-      color: 0x7ef5c8,
-      emissive: 0x062318,
+      color: 0xff6600,
+      emissive: 0xff6600,
       shininess: 100,
-      specular: 0x7ef5c8,
+      specular: 0xff6600,
       transparent: true,
       opacity: 0.15,
     });
     const torus = new THREE.Mesh(geometry1, material);
     scene.add(torus);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xff6600, 0.5);
     scene.add(ambientLight);
 
     const animate = () => {
@@ -172,7 +172,10 @@ export default function ITSolutionPage() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#e8f9f3] via-[#f0fcf7] to-[#dff8ee] overflow-x-hidden">
+    <div
+      className="relative min-h-screen bg-gradient-to-br from-[#efe9dd] via-[#e2d2be] to-[#dfcfbb]
+ overflow-x-hidden"
+    >
       {/* FIX: Added overflow-x-hidden to prevent horizontal scroll */}
       <canvas
         ref={canvasRef}
@@ -189,7 +192,6 @@ export default function ITSolutionPage() {
             alt="LERIC Logo"
             className="h-15 w-auto sm:h-10" // Height adjust kar sakte hain aap
           />
-
         </div>
         <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-800">
           <a href="#" className="hover:text-gray-600 transition-colors">
@@ -361,3 +363,4 @@ export default function ITSolutionPage() {
     </div>
   );
 }
+
