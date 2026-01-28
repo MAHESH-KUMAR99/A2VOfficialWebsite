@@ -23,8 +23,8 @@ const PROJECTS_DATABASE = [
   },
   {
     id: 2,
-    title: "Kayakalp Hospital",
-    url: "https://www.kayakalphospital.com/",
+    title: "Lotus Multi-Specialty Hospital",
+    url: "mahesh-hospital-web.netlify.app",
     tags: ["Healthcare", "Portal"],
     description:
       "Multi-specialty hospital portal focused on patient care and simplified appointment booking.",
@@ -40,10 +40,18 @@ const PROJECTS_DATABASE = [
   {
     id: 4,
     title: "A2V Digital Hub",
-    url: "https://a2vgroups.com/",
+    url: "http://192.168.0.103:3000/",
     tags: ["Agency", "Portfolio"],
     description:
       "A digital transformation showcase featuring high-end marketing dashboards.",
+  },
+  {
+    id: 5,
+    title: "Mahesh Beauty Web",
+    url: "https://mahesh-beauty-web.netlify.app/",
+    tags: ["Beauty & Wellness", "E-Commerce"],
+    description:
+      "A premium beauty and grooming showcase featuring advanced skincare solutions and salon services.",
   },
 ];
 
