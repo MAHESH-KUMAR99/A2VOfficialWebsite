@@ -104,7 +104,7 @@ export default function AlericITPage() {
               {/* Massive Fluid Typography for 15+ */}
               <h1 className="text-[9rem] sm:text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold leading-[0.8] tracking-[-0.05em] text-[#0a251c] flex flex-col sm:flex-row items-center sm:items-baseline select-none">
                 <Counter from={0} to={15} />
-                <span className="text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-extralight tracking-tighter opacity-30 sm:ml-4">
+                <span className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-extralight tracking-tighter opacity-30 sm:ml-4">
                   +YEARS
                 </span>
               </h1>
@@ -197,19 +197,19 @@ export default function AlericITPage() {
             icon="📋"
             target={34}
             suffix=" K"
-            label="Project Completed"
+            label="Digital Assets Delivered"
             index={0}
           />
           <StatItem
             icon="🌐"
             target={16}
             suffix=" K"
-            label="Country Office"
+            label="Global Operations Hub"
             index={1}
           />
           <StatItem
             icon="☀️"
-            target={12}
+            target={15}
             suffix=" K"
             label="Year of Experience"
             index={2}
@@ -274,7 +274,7 @@ function StatItem({ icon, target, suffix, label, index }) {
       transition={{ delay: index * 0.1, duration: 0.8 }}
       className="flex flex-col items-center lg:items-start gap-2"
     >
-      <div className="text-3xl mb-2 grayscale opacity-50">{icon}</div>
+      <div className="text-3xl mb-2 text-[#ff6600] opacity-50">{icon}</div>
       <h3 className="text-5xl sm:text-6xl font-bold tracking-tighter">
         <Counter from={0} to={target} />
         {suffix}
