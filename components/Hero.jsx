@@ -292,7 +292,7 @@ export default function ITSolutionPage() {
               {services.map((service, index) => (
                 <button
                   key={`s1-${index}`}
-                  className="px-4 sm:px-6 py-2 bg-transparent backdrop-blur-sm border border-gray-300 rounded-full text-gray-800 font-medium text-xs sm:text-sm hover:bg-gray-900 hover:text-white transition-all whitespace-nowrap"
+                  className="px-4 sm:px-6 py-2 bg-transparent backdrop-blur-sm border border-[#f28842] rounded-full text-gray-800 font-medium text-xs sm:text-sm hover:bg-[#f28842] hover:text-white transition-all whitespace-nowrap"
                   // FIX: Made button responsive
                 >
                   {service}
@@ -303,7 +303,7 @@ export default function ITSolutionPage() {
               {services.map((service, index) => (
                 <button
                   key={`s2-${index}`}
-                  className="px-4 sm:px-6 py-2 bg-transparent backdrop-blur-sm border border-gray-300 rounded-full text-gray-800 font-medium text-xs sm:text-sm hover:bg-gray-900 hover:text-white transition-all whitespace-nowrap"
+                  className="px-4 sm:px-6 py-2 bg-transparent backdrop-blur-sm border border-[#f28842] rounded-full text-gray-800 font-medium text-xs sm:text-sm hover:bg-[#f28842] hover:text-white transition-all whitespace-nowrap"
                 >
                   {service}
                 </button>
@@ -363,4 +363,3 @@ export default function ITSolutionPage() {
     </div>
   );
 }
-

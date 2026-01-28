@@ -242,20 +242,7 @@ export default function PuzzleServicePage() {
         )}
       </AnimatePresence>
 
-      <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
-        body {
-          font-family: "Archivo Black", sans-serif;
-          background: #020202;
-        }
-        ::-webkit-scrollbar {
-          width: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #ff6600;
-          border-radius: 20px;
-        }
-      `}</style>
+    
     </div>
   );
 }
