@@ -313,9 +313,9 @@ export default function A2VAgency() {
       </AnimatePresence>
 
       <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap");
+  
         body {
-          font-family: "Plus Jakarta Sans", sans-serif;
+       
           background: #050505;
         }
         ::-webkit-scrollbar {
